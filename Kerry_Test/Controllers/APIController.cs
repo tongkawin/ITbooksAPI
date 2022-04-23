@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,7 +8,7 @@ using System.Security.Cryptography;
 
 namespace Kerry_Test.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class APIController : ControllerBase
     {
@@ -23,7 +20,7 @@ namespace Kerry_Test.Controllers
             _configuration = configuration;
         }
 
-        //POST/API/register
+        //POST/api/register
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserRegister request)
         {
@@ -36,7 +33,7 @@ namespace Kerry_Test.Controllers
             return Ok(user);
         }
 
-        //POST/API/login
+        //POST/api/login
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserLogin request)
         {
@@ -60,12 +57,6 @@ namespace Kerry_Test.Controllers
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, "Admin")
             };
-
-            /*var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.RsaSha512Signature);*/
-
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddDays(1));
@@ -93,7 +84,7 @@ namespace Kerry_Test.Controllers
             }
         }
 
-        //GET/API/books
+        //GET/api/books
         [HttpGet("books")]
         public async Task<ActionResult> ViewData()
         {
